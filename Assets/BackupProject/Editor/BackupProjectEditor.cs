@@ -2,7 +2,7 @@
 using UnityEditor;
 using System.Collections;
 using System.IO;
-
+using Ionic.Zip;
 
 [CustomEditor(typeof(BackupProject))]
 public class BackupProjectEditor : Editor  
@@ -22,8 +22,8 @@ public class BackupProjectEditor : Editor
 
 	public override void OnInspectorGUI ()
 	{
-		Skin();
 		backupScript = Init() as BackupProject;
+		Skin();
 		string projectPath = Application.dataPath;
 		projectPath = projectPath.Substring(0, projectPath.Length - 7);
 		backupScript.sourceDirectory = projectPath;
@@ -40,6 +40,7 @@ public class BackupProjectEditor : Editor
 		if(System.String.IsNullOrEmpty(backupScript.destinationDirectory))
 			EditorGUILayout.HelpBox("Please select destination folder", MessageType.Warning);
 		backupScript.selectedSaveAssets = EditorGUILayout.IntPopup("Save",backupScript.selectedSaveAssets,assetsName,assets);
+		backupScript.zipCompression = EditorGUILayout.ToggleLeft("ZIP (additional copy)", backupScript.zipCompression);
 		if(EditorApplication.isPlayingOrWillChangePlaymode)
 			GUI.enabled = false;
 		else
@@ -65,9 +66,7 @@ public class BackupProjectEditor : Editor
 			EditorApplication.update = null;
 			backupScript.nextBackup = 0;
 		}
-		
 
-		
 		
 		//center element
 		GUILayout.BeginHorizontal();
@@ -89,9 +88,10 @@ public class BackupProjectEditor : Editor
 		{
 			backupScript.nextBackup = 0;
 		}
-	}
-	
-	void EditorUpdate ()
+
+}
+
+void EditorUpdate ()
 	{
 		BackupByTime();
 	}
@@ -124,21 +124,8 @@ public class BackupProjectEditor : Editor
 	
 	void Skin ()
 	{
-		GUI.backgroundColor = Color.cyan;
-		GUI.contentColor = Color.yellow;
-	}
-	
-	
-	void ProgressBar (float value, string text)
-	{
-		GUIStyle style = new GUIStyle();
-		GUI.backgroundColor = Color.cyan;
-		GUI.contentColor = Color.yellow;
-		
-		Rect rect = GUILayoutUtility.GetRect(25, 25, style);
-		EditorGUI.ProgressBar(rect, value, text);
-		EditorGUILayout.Space();
-		
+		GUI.backgroundColor = backupScript.backgroundColor;
+		GUI.contentColor = backupScript.contentColor;
 	}
 	
 	private float progress = 0.0f;
@@ -202,5 +189,16 @@ public class BackupProjectEditor : Editor
 		EditorUtility.ClearProgressBar();
 		Debug.Log("Backup created");
 		}
+		//zip compression
+		if(backupScript.zipCompression && allProgress != 0.0f)
+		{
+			using (var zip = new ZipFile())
+			{
+				zip.AddDirectory(backupScript.destinationDirectory);
+				zip.Save(backupScript.destinationDirectory + "/"+ PlayerSettings.productName +".zip");
+			}
+			Debug.Log("Zip created");
+		}
+
 	}
 }

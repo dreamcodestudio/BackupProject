@@ -12,6 +12,7 @@ public class BackupProject : MonoBehaviour
 	public double nextBackup = 0;
 	public int selectedTime = 10;
 	//
+	public bool zipCompression = false;
 	public string copyExtension = "*";
 	public enum AssetsTypes {
 		//Scene,
@@ -23,4 +24,7 @@ public class BackupProject : MonoBehaviour
 	}
 	public AssetsTypes assetsTypes;
 	public int selectedSaveAssets = (int)AssetsTypes.All;
+	//settings
+	public Color contentColor = Color.white;
+	public Color backgroundColor = Color.white;
 }
