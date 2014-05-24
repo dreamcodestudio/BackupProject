@@ -27,8 +27,8 @@ Features:
 How to use Demo Video:
 http://www.youtube.com/watch?feature=player_detailpage&v=GlhSshdKk3k
 
-GitHub:
-https://github.com/slavaobninsk/BackupProject.git
+AssetStore:
+http://u3d.as/content/yaroslav-petrichka/backup-project
 
 Support: islavik777@gmail.com
 
