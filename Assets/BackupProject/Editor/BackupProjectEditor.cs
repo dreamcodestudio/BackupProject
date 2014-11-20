@@ -13,14 +13,16 @@ public class BackupProjectEditor : Editor
 	
 	string[] timeNames = new string[] {"10 Min", "15 Min", "30 Min", "45 Min", "1Hr", "2Hr", "4Hr", "8Hr"};
 	int[] times = new int[]{10, 15, 30, 45, 60, 120, 240, 480};
-	
+    bool isBackupAvailable;
+
 	object Init ()
 	{
 		BackupProject backupProj = (BackupProject)target;
 		return backupProj;
 	}
 
-	public override void OnInspectorGUI ()
+    #region UNITY_EVENTS
+    public override void OnInspectorGUI ()
 	{
 		backupScript = Init() as BackupProject;
 		Skin();
@@ -37,8 +39,13 @@ public class BackupProjectEditor : Editor
 		if(GUILayout.Button("Edit", GUILayout.MaxWidth(50),GUILayout.MaxHeight(20)))
 			backupScript.destinationDirectory = EditorUtility.OpenFolderPanel("Select destination directory","","");
 		GUILayout.EndHorizontal();
-		if(System.String.IsNullOrEmpty(backupScript.destinationDirectory))
-			EditorGUILayout.HelpBox("Please select destination folder", MessageType.Warning);
+        if (System.String.IsNullOrEmpty(backupScript.destinationDirectory))
+        {
+            EditorGUILayout.HelpBox("Please select destination folder", MessageType.Warning);
+            isBackupAvailable = false;
+        }
+        else
+            isBackupAvailable = true;
 		backupScript.selectedSaveAssets = EditorGUILayout.IntPopup("Save",backupScript.selectedSaveAssets,assetsName,assets);
 		backupScript.zipCompression = EditorGUILayout.ToggleLeft("ZIP (additional copy)", backupScript.zipCompression);
 		if(EditorApplication.isPlayingOrWillChangePlaymode)
@@ -46,8 +53,8 @@ public class BackupProjectEditor : Editor
 		else
 		GUI.enabled = true;
 		backupScript.assetsTypes = (BackupProject.AssetsTypes)(backupScript.selectedSaveAssets);
-
-		backupScript.autoBackup = EditorGUILayout.ToggleLeft("AutoBackup", backupScript.autoBackup);
+        if (isBackupAvailable)
+		    backupScript.autoBackup = EditorGUILayout.ToggleLeft("AutoBackup", backupScript.autoBackup);
 		if (backupScript.autoBackup)
 		{
 			backupScript.manualBackup = false;
@@ -75,11 +82,14 @@ public class BackupProjectEditor : Editor
 			GUI.enabled = false;
 		else
 		GUI.enabled = backupScript.manualBackup;
-		if(GUILayout.Button("Backup", GUILayout.MaxWidth(100),GUILayout.MaxHeight(30)))
-		{
-			Backup(backupScript.sourceDirectory, backupScript.destinationDirectory);
-			
-		}
+        if (isBackupAvailable)
+        {
+            if (GUILayout.Button("Backup", GUILayout.MaxWidth(100), GUILayout.MaxHeight(30)))
+            {
+                Backup(backupScript.sourceDirectory, backupScript.destinationDirectory);
+
+            }
+        }
 
 		GUILayout.FlexibleSpace();
 		GUILayout.EndHorizontal();
@@ -91,35 +101,20 @@ public class BackupProjectEditor : Editor
 
 }
 
-void EditorUpdate ()
-	{
-		BackupByTime();
-	}
-	
-	
-	double convertMinToSec (int minutes)
+    void EditorUpdate()
+    {
+        BackupByTime();
+    }
+
+    void OnInspectorUpdate()
+    {
+        Repaint();
+    }
+    #endregion
+
+    double convertMinToSec (int minutes)
 	{
 		return (double)(minutes*60);
-	}
-	void BackupByTime ()
-	{
-		if(backupScript.nextBackup <= 0)
-			backupScript.nextBackup = EditorApplication.timeSinceStartup + backupScript.backupTime;
-		if(EditorApplication.timeSinceStartup > backupScript.nextBackup)
-		{
-			if(!EditorApplication.isPlayingOrWillChangePlaymode)
-			{
-				Backup(backupScript.sourceDirectory, backupScript.destinationDirectory);
-			}
-			backupScript.nextBackup=EditorApplication.timeSinceStartup + backupScript.backupTime;
-		}
-		Repaint();
-	}
-	
-	
-	void OnInspectorUpdate()
-	{
-		Repaint();
 	}
 	
 	void Skin ()
@@ -127,8 +122,9 @@ void EditorUpdate ()
 		GUI.backgroundColor = backupScript.backgroundColor;
 		GUI.contentColor = backupScript.contentColor;
 	}
-	
-	private float progress = 0.0f;
+
+    #region BACKUP
+    private float progress = 0.0f;
 	private float allProgress = 0.0f;
 	private void Backup(string sourcePath, string destionationPath)
 	{
@@ -200,5 +196,21 @@ void EditorUpdate ()
 			Debug.Log("Zip created");
 		}
 
-	}
+    }
+
+    void BackupByTime()
+    {
+        if (backupScript.nextBackup <= 0)
+            backupScript.nextBackup = EditorApplication.timeSinceStartup + backupScript.backupTime;
+        if (EditorApplication.timeSinceStartup > backupScript.nextBackup)
+        {
+            if (!EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                Backup(backupScript.sourceDirectory, backupScript.destinationDirectory);
+            }
+            backupScript.nextBackup = EditorApplication.timeSinceStartup + backupScript.backupTime;
+        }
+        Repaint();
+    }
+    #endregion
 }

@@ -14,27 +14,54 @@ public class BackupProjectWindow : EditorWindow
 		settingWindow.title = "Backup Project";
 	}
 
-	void OnEnable()
+    #region UNITY_EVENTS
+    void OnEnable()
 	{
-		if(backupScript == null)
-		backupScript = (BackupProject)FindObjectOfType(typeof(BackupProject));
+        if (backupScript == null)
+            RefreshBackupDelegate();
 	}
 
 	void OnGUI()
 	{
-		backupScript.contentColor = EditorGUILayout.ColorField("Text color", backupScript.contentColor);
-		backupScript.backgroundColor = EditorGUILayout.ColorField("Background color", backupScript.backgroundColor);
-		EditorGUILayout.Space();
-		GUILayout.BeginHorizontal();
-		GUILayout.FlexibleSpace();
-		if(GUILayout.Button("Apply",GUILayout.MaxWidth(100),GUILayout.MaxHeight(30)))
-		{
-			EditorApplication.SaveScene();
-			settingWindow.Close();
-		}
-		GUILayout.FlexibleSpace();
-		GUILayout.EndHorizontal();
+        if (backupScript != null)
+        {
+            backupScript.contentColor = EditorGUILayout.ColorField("Text color", backupScript.contentColor);
+            backupScript.backgroundColor = EditorGUILayout.ColorField("Background color", backupScript.backgroundColor);
+            EditorGUILayout.Space();
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Apply", GUILayout.MaxWidth(100), GUILayout.MaxHeight(30)))
+            {
+                EditorApplication.SaveScene();
+                settingWindow.Close();
+            }
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+        else
+            WarningMessage();
 
 	}
+    #endregion
+    void RefreshBackupDelegate()
+    {
+        backupScript = (BackupProject)FindObjectOfType(typeof(BackupProject));
+    }
+
+    void WarningMessage()
+    {
+        EditorGUILayout.Space();
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        GUILayout.Label("Please add 'backupDelegate' prefab to scene");
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        if (GUILayout.Button("Refresh", GUILayout.MaxWidth(100), GUILayout.MaxHeight(30)))
+            RefreshBackupDelegate();
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+    }
 
 }

@@ -1,9 +1,9 @@
-BackupProject v.0.73
+BackupProject v.0.74
 BackupProject - Unity Editor extension can backup your project by two ways: using manually function or choosing auto save interval. Extension available free for Windows and Mac users. This extension help you saving hours of work.
 
 New:
-- Add option to ZIP the project folder (additional copy)
-- Added menu for customizing color of plugin
+- Fix editor window exception, if user not add delegate to scene
+- Support Unity 4.5
 
 Installation
 To install BackupProject from the Asset Store, open Window → Asset Store, navigate to the BackupProject package, and click Download/Import.
@@ -16,11 +16,13 @@ Basic Setup
 5. For customizing color of plugin, open Window → Backup Project. After editing setting, click on “Apply” button to save preferences.
 
 Features:
--Open source
--Support Mac and Windows
--Support Unity 4.0 or higher
--Easy to add or remove from project
--Can separate backup shaders, compute shaders of fbx files
+- Open source
+- Support Mac and Windows
+- Support Unity 4.0 or higher
+- Easy to add or remove from project
+- Can separate backup shaders, compute shaders of fbx files
+- Option to ZIP the project folder (additional copy)
+- Menu for customizing color of plugin
 
 How to use Demo Video:
 http://www.youtube.com/watch?feature=player_detailpage&v=GlhSshdKk3k
@@ -31,3 +33,5 @@ https://github.com/slavaobninsk/BackupProject.git
 Support: islavik777@gmail.com
 
 My personal blog : http://islavik777.wix.com/unityaddons
+
+Twitter: http://twitter.com/slavaobninsk
