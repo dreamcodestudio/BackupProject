@@ -1,11 +1,10 @@
-BackupProject v.0.74
+BackupProject v.0.75
 ============
 
 BackupProject - Unity Editor extension can backup your project by two ways: using manually function or choosing auto save interval. Extension available free for Windows and Mac users. This extension help you saving hours of work.
 
 New:
-- Fix editor window exception, if user not add delegate to scene
-- Support Unity 4.5
+- Support Unity 5.0
 
 Installation
 To install BackupProject from the Asset Store, open Window → Asset Store, navigate to the BackupProject package, and click Download/Import.
@@ -37,3 +36,5 @@ Support: islavik777@gmail.com
 My personal blog : http://islavik777.wix.com/unityaddons
 
 Twitter: http://twitter.com/slavaobninsk
+
+RoadMap: https://trello.com/b/xXHzdj9B/unity-­‐asset-­‐store
