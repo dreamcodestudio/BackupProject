@@ -37,10 +37,10 @@ http://www.youtube.com/watch?feature=player_detailpage&v=GlhSshdKk3k
 AssetStore:
 http://u3d.as/content/yaroslav-petrichka/backup-project
 
-Support: islavik777@gmail.com
+Support: indieypdev@gmail.com
 
-My personal blog : http://islavik777.wix.com/unityaddons
+My personal blog : http://indieyp.com
 
-Twitter: http://twitter.com/slavaobninsk
+Twitter: http://twitter.com/IndieYPDev
 
 RoadMap: https://trello.com/b/xXHzdj9B/unity-asset-store
